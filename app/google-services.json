@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "330249036314",
+    "project_id": "fir-authkiname",
+    "storage_bucket": "fir-authkiname.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330249036314:android:edb1de23217f50e924a7a3",
+        "android_client_info": {
+          "package_name": "com.example.kiname"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "330249036314-4lpotms1cmdkbacesk8s6q5j47ept22c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kiname",
+            "certificate_hash": "c1857dd8ddc700d062a86d4dade9f5bcad565cca"
+          }
+        },
+        {
+          "client_id": "330249036314-otgo6vd854iodkfcd1ubd1jju7t5phbi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhhIveCRdl718uz9UysOQ2aj2Rry4Jsrc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "330249036314-otgo6vd854iodkfcd1ubd1jju7t5phbi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
