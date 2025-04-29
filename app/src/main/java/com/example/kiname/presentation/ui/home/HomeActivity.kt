@@ -42,7 +42,9 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initRecycler() {
-        adapter = AppointmentAdapter(mutableListOf())
+        adapter = AppointmentAdapter(mutableListOf()) { id ->
+            homeViewModel.deleteAppointment(id)
+        }
         binding.rvAppointments.layoutManager = LinearLayoutManager(this)
         binding.rvAppointments.adapter = adapter
     }

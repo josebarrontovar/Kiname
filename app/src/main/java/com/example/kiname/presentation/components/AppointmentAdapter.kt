@@ -8,28 +8,27 @@ import com.example.kiname.databinding.ItemAssignmentAppointmentsBinding
 import com.example.kiname.domain.model.Appoinment
 import com.example.kiname.presentation.ui.addappoinment.AddAppointmentActivity
 
-class AppointmentAdapter(private val items: MutableList<Appoinment>) :
+class AppointmentAdapter(
+    private val items: MutableList<Appoinment>,
+    private val onDeleteClick: (String) -> Unit
+) :
     RecyclerView.Adapter<AppointmentViewHolder>() {
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): AppointmentViewHolder {
 
         val binding = ItemAssignmentAppointmentsBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+            LayoutInflater.from(parent.context), parent, false
         )
         return AppointmentViewHolder(binding)
 
     }
 
     override fun onBindViewHolder(
-        holder: AppointmentViewHolder,
-        position: Int
+        holder: AppointmentViewHolder, position: Int
     ) {
         val appointment = items[position]
-        holder.bind(appointment)
+        holder.bind(appointment, onDeleteClick)
     }
 
     override fun getItemCount(): Int {
@@ -40,10 +39,10 @@ class AppointmentAdapter(private val items: MutableList<Appoinment>) :
         items.clear()
         val filteredItems =
             newItems.filter { it.clientEmail.isNotEmpty() && it.clientPhone.isNotEmpty() }
-        if(filteredItems.isNotEmpty()) {
+        if (filteredItems.isNotEmpty()) {
             items.addAll(filteredItems)
-            notifyDataSetChanged()
         }
+        notifyDataSetChanged()
     }
 
 }
@@ -52,13 +51,13 @@ public class AppointmentViewHolder(private val binding: ItemAssignmentAppointmen
     RecyclerView.ViewHolder(binding.root) {
 
     private val tvTitle = binding.tvTitle
-
     private val tvSubtitle = binding.tvSubtitle
     private val customerName = binding.tvClientName
     private val customerPhone = binding.tvPhone
     private val buttonEdit = binding.btnEdit
+    private val buttonDelete = binding.btnDelete
 
-    fun bind(appointment: Appoinment) {
+    fun bind(appointment: Appoinment, onDeleteClick: (String) -> Unit) {
         tvTitle.text = appointment.clientEmail
         tvSubtitle.text = appointment.clientLastName
         customerName.text = appointment.clientName
@@ -75,6 +74,11 @@ public class AppointmentViewHolder(private val binding: ItemAssignmentAppointmen
             }
             context.startActivity(intent)
         }
+
+        buttonDelete.setOnClickListener {
+            onDeleteClick(appointment.id!!)
+        }
+
     }
 
 }

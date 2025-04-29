@@ -44,4 +44,13 @@ class AppoinmentRepositoryImpl @Inject constructor() : AppoinmentRepository {
             Result.failure(e)
         }
     }
+
+    override suspend fun deleteAppointment(id: String): Result<Unit> {
+        return try {
+            firestore.collection("appointment").document(id).delete().await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

@@ -31,4 +31,17 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    fun deleteAppointment(id: String) {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                repository.deleteAppointment(id)
+            }
+            result.onSuccess {
+                getAllAppointments()
+            }.onFailure { exception ->
+                listAppointment.value = null
+            }
+        }
+    }
+
 }
