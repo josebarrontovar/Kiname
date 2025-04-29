@@ -1,5 +1,6 @@
 package com.example.kiname.presentation.ui.addappoinment
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,13 +28,31 @@ class AddAppointmentViewModel : ViewModel() {
     fun submitForm() {
         val currentData = _formData.value ?: return
         viewModelScope.launch {
-            val response = withContext(Dispatchers.IO) {
-                appoinmentRepository.saveAppointment(currentData)
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    appoinmentRepository.saveAppointment(currentData)
+                }
+                response.onSuccess {
+                    _stateDBInsert.value = true
+                }.onFailure { exception ->
+                    _stateDBInsert.value = false
+                }
+            } catch (e: Exception) {
+                Log.e("AddAppointmentViewModel", "Error: ${e.message}")
             }
-            response.onSuccess {
-                _stateDBInsert.value = true
-            }.onFailure { exception ->
-                _stateDBInsert.value = false
+        }
+
+    }
+
+    fun submitSheet() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                try {
+                    appoinmentRepository.saveSheet(_formData.value!!)
+                }
+                catch (e: Exception) {
+                    Log.d("AddAppointmentViewModel", "Error saving sheet: ${e.message}")
+                }
             }
         }
     }
@@ -47,7 +66,6 @@ class AddAppointmentViewModel : ViewModel() {
             "Tratamiento Antiedad"
         )
     }
-
 }
 
 sealed class FormState {

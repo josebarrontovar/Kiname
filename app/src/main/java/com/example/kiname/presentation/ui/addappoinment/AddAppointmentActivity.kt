@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kiname.data.remote.RetrofitClient
+import com.example.kiname.data.remote.RetrofitService
 import com.example.kiname.databinding.ActivityAddAppointmentBinding
 import com.example.kiname.domain.model.Appoinment
 import com.example.kiname.presentation.components.DateTimePickerDialogFragment
@@ -17,6 +19,7 @@ class AddAppointmentActivity : AppCompatActivity() {
     private var appointmentId: String? = null
     private val addAppointmentVM: AddAppointmentViewModel by viewModels()
     private lateinit var binding: ActivityAddAppointmentBinding
+    private var retrofitClient: RetrofitService? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -46,7 +49,7 @@ class AddAppointmentActivity : AppCompatActivity() {
         addAppointmentVM.stateDBInsert.observe(this) { isSubmitted ->
             if (isSubmitted) {
                 Log.d("JGBT", "YES")
-                finish()
+                //finish()
             } else {
                 Log.d("JGBT", "NO")
             }
@@ -62,18 +65,19 @@ class AddAppointmentActivity : AppCompatActivity() {
             val dateTime = binding.dateTimeEditText.text.toString()
             val treatment = binding.spinnerTreatment.selectedItem.toString()
 
-            addAppointmentVM.updateFormData(
-                Appoinment(
-                    id = appointmentId,
-                    clientName = clientName,
-                    clientLastName = clientLastName,
-                    clientPhone = clientPhone,
-                    clientEmail = clientEmail,
-                    dateTime = dateTime,
-                    treatment = treatment
-                )
+
+            var data = Appoinment(
+                id = appointmentId,
+                clientName = clientName,
+                clientLastName = clientLastName,
+                clientPhone = clientPhone,
+                clientEmail = clientEmail,
+                dateTime = dateTime,
+                treatment = treatment
             )
+            addAppointmentVM.updateFormData(data)
             addAppointmentVM.submitForm()
+            addAppointmentVM.submitSheet()
         }
 
         binding.dateTimeEditText.setOnClickListener {
