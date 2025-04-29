@@ -9,6 +9,7 @@ import com.example.kiname.databinding.ActivityAddAppointmentBinding
 import com.example.kiname.domain.model.Appoinment
 
 class AddAppointmentActivity : AppCompatActivity() {
+    private var appointmentId: String? = null
     private val addAppointmentVM: AddAppointmentViewModel by viewModels()
     private lateinit var binding: ActivityAddAppointmentBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,10 +19,25 @@ class AddAppointmentActivity : AppCompatActivity() {
         setContentView(binding.root)
         setBinding()
         initObservers()
+        getIntents()
+    }
+
+    private fun getIntents() {
+        val clientEmail = intent.getStringExtra("clientEmail")
+        val clientName = intent.getStringExtra("clientName")
+        val clientLastName = intent.getStringExtra("clientLastName")
+        val clientPhone = intent.getStringExtra("clientPhone")
+        appointmentId = intent.getStringExtra("appointmentId")
+
+        if (clientPhone != null && clientEmail != null && clientName != null && clientLastName != null) {
+            binding.clientEmailEditText.setText(clientEmail)
+            binding.clientNameEditText.setText(clientName)
+            binding.clientLastNameEditText.setText(clientLastName)
+            binding.clientPhoneEditText.setText(clientPhone)
+        }
     }
 
     private fun initObservers() {
-
         addAppointmentVM.stateDBInsert.observe(this) { isSubmitted ->
             if (isSubmitted) {
                 Log.d("JGBT", "YES")
@@ -41,6 +57,7 @@ class AddAppointmentActivity : AppCompatActivity() {
 
             addAppointmentVM.updateFormData(
                 Appoinment(
+                    id=appointmentId,
                     clientName = clientName,
                     clientLastName = clientLastName,
                     clientPhone = clientPhone,
