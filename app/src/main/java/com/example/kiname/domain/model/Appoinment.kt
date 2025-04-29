@@ -5,5 +5,7 @@ class Appoinment(
     var clientName: String = "",
     var clientLastName: String = "",
     var clientPhone: String = "",
-    var clientEmail: String = ""
+    var clientEmail: String = "",
+    var dateTime: String = "",
+    var treatment: String = "",
 )

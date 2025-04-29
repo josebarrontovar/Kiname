@@ -38,6 +38,16 @@ class AddAppointmentViewModel : ViewModel() {
         }
     }
 
+    fun getTreatments(): List<String> {
+        return listOf(
+            "Masaje Relajante",
+            "Facial Hidratante",
+            "Limpieza Profunda",
+            "Depilación",
+            "Tratamiento Antiedad"
+        )
+    }
+
 }
 
 sealed class FormState {

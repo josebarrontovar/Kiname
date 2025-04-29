@@ -2,11 +2,16 @@ package com.example.kiname.presentation.ui.addappoinment
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kiname.databinding.ActivityAddAppointmentBinding
 import com.example.kiname.domain.model.Appoinment
+import com.example.kiname.presentation.components.DateTimePickerDialogFragment
+import java.util.Calendar
 
 class AddAppointmentActivity : AppCompatActivity() {
     private var appointmentId: String? = null
@@ -54,20 +59,61 @@ class AddAppointmentActivity : AppCompatActivity() {
             val clientLastName = binding.clientLastNameEditText.text.toString()
             val clientPhone = binding.clientPhoneEditText.text.toString()
             val clientEmail = binding.clientEmailEditText.text.toString()
+            val dateTime = binding.dateTimeEditText.text.toString()
+            val treatment = binding.spinnerTreatment.selectedItem.toString()
 
             addAppointmentVM.updateFormData(
                 Appoinment(
-                    id=appointmentId,
+                    id = appointmentId,
                     clientName = clientName,
                     clientLastName = clientLastName,
                     clientPhone = clientPhone,
-                    clientEmail = clientEmail
+                    clientEmail = clientEmail,
+                    dateTime = dateTime,
+                    treatment = treatment
                 )
             )
             addAppointmentVM.submitForm()
-
         }
 
+        binding.dateTimeEditText.setOnClickListener {
+            val dateTimePicker = DateTimePickerDialogFragment { calendar ->
+                val selectedDate =
+                    "${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH) + 1}/${
+                        calendar.get(Calendar.YEAR)
+                    }"
+                val selectedTime =
+                    "${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)}"
+                binding.dateTimeEditText.setText("$selectedDate $selectedTime")
+            }
+            dateTimePicker.show(supportFragmentManager, "dateTimePicker")
+        }
+
+        val treatments = addAppointmentVM.getTreatments()
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            treatments
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerTreatment.adapter = adapter
+
+        binding.spinnerTreatment.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val selectedTreatment = parent.getItemAtPosition(position) as String
+                    // Maneja la selección aquí
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    // Maneja la no selección aquí, si es necesario
+                }
+            }
 
     }
 }
